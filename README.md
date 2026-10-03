@@ -1,4 +1,4 @@
-# DISHA: AI-Powered Label Compliance Checking System (SIH26034)
+# DISHA: AI-Powered Label Compliance Checking System 
 
 A production-ready full-stack web application designed for **Smart India Hackathon SIH Problem Statement SIH26034** (Legal Metrology & Packaged Commodities Label Audit System).
 
