@@ -10,10 +10,13 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "super-secret-sih2026-compliance-key-change-in-production")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  # 30 minutes (was 7 days)
+
+    # Refresh Token
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     # Server & Networking
-    PORT: int = int(os.getenv("PORT", "8000"))
+    PORT: int = int(os.getenv("PORT", "8080"))
     ALLOWED_ORIGINS: str = os.getenv("ALLOWED_ORIGINS", "*")
     TESSERACT_CMD: Optional[str] = os.getenv("TESSERACT_CMD", None)
 
@@ -37,6 +40,24 @@ class Settings(BaseSettings):
     # Storage paths for local fallback
     UPLOAD_DIR: str = os.path.join(os.getcwd(), "uploads")
     REPORT_DIR: str = os.path.join(os.getcwd(), "reports")
+
+    # Email / SMTP (optional — graceful degradation if not configured)
+    SMTP_HOST: Optional[str] = os.getenv("SMTP_HOST", None)
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: Optional[str] = os.getenv("SMTP_USER", None)
+    SMTP_PASSWORD: Optional[str] = os.getenv("SMTP_PASSWORD", None)
+    SMTP_FROM_EMAIL: str = os.getenv("SMTP_FROM_EMAIL", "noreply@disha.gov.in")
+    SMTP_FROM_NAME: str = os.getenv("SMTP_FROM_NAME", "DISHA - Digital Inspection & Standards Hub")
+    SMTP_USE_TLS: bool = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
+    EMAIL_VERIFICATION_REQUIRED: bool = os.getenv("EMAIL_VERIFICATION_REQUIRED", "false").lower() == "true"
+
+    # Frontend URL (for email links)
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
+    # Rate Limiting
+    RATE_LIMIT_LOGIN: str = "5/minute"
+    RATE_LIMIT_REGISTER: str = "3/minute"
+    RATE_LIMIT_PASSWORD_RESET: str = "3/minute"
 
     model_config = SettingsConfigDict(case_sensitive=True, env_file=".env", extra="ignore")
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { ActiveTab } from '../types/metrology';
 import type { User } from '../types/auth';
 
@@ -19,6 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenLogin,
   onLogout
 }) => {
+  const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -159,14 +161,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="flex items-center gap-2 p-1.5 pl-2 rounded-xs border border-[#E2DFD8] hover:bg-[#F4F2EB] transition-colors cursor-pointer"
               >
                 <div className="w-6 h-6 rounded-xs bg-[#141413] text-[#FFFFFF] font-bold flex items-center justify-center text-[10px] font-mono">
-                  {user.full_name.charAt(0)}
+                  {user.full_name?.charAt(0) || 'U'}
                 </div>
                 <div className="text-left hidden lg:block">
                   <p className="text-xs font-semibold text-[#141413] leading-none">
                     {user.full_name}
                   </p>
                   <p className="text-[10px] text-[#8F8E87] leading-tight mt-0.5">
-                    {user.role === 'SYSTEM_ADMIN' ? 'Administrator' : 'Inspector'}
+                    {user.role === 'SYSTEM_ADMIN' ? 'Administrator' : user.role === 'ENFORCEMENT_OFFICER' ? 'Inspector' : 'User'}
                   </p>
                 </div>
                 <span className="material-symbols-outlined text-[16px] text-[#8F8E87]">
@@ -186,15 +188,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <p className="font-semibold text-[#141413] truncate">{user.full_name}</p>
                       <p className="text-[11px] text-[#6E6D67] truncate">{user.email}</p>
                       <span className="inline-block mt-1.5 text-[10px] font-mono uppercase tracking-wider text-[#141413] bg-[#F2F0E8] border border-[#E2DFD8] px-1.5 py-0.5 rounded-xs">
-                        {user.role === 'SYSTEM_ADMIN' ? 'System Administrator' : 'Legal Metrology Officer'}
+                        {user.role === 'SYSTEM_ADMIN' ? 'System Administrator' : user.role === 'ENFORCEMENT_OFFICER' ? 'Legal Metrology Officer' : 'Statutory User'}
                       </span>
                     </div>
+
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        navigate('/profile');
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-[#F4F2EB] text-[#141413] font-medium flex items-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">account_circle</span>
+                      <span>Profile & Account</span>
+                    </button>
+
                     <button
                       onClick={() => {
                         setUserMenuOpen(false);
                         onLogout();
                       }}
-                      className="w-full text-left px-4 py-2 hover:bg-[#FDE8E6] text-[#C5281B] font-medium flex items-center gap-2 transition-colors cursor-pointer"
+                      className="w-full text-left px-4 py-2 hover:bg-[#FDE8E6] text-[#C5281B] font-medium flex items-center gap-2 transition-colors cursor-pointer border-t border-[#E2DFD8]"
                     >
                       <span className="material-symbols-outlined text-[16px]">logout</span>
                       <span>Sign Out</span>
@@ -206,7 +220,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           ) : (
             <button
               onClick={onOpenLogin}
-              className="btn-secondary text-xs !py-1.5 !px-3"
+              className="btn-secondary text-xs !py-1.5 !px-3 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">lock</span>
               <span>Officer Sign In</span>

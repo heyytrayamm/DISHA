@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from app.core.database import Base
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -10,7 +11,15 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     full_name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(String, nullable=False, default="ENFORCEMENT_OFFICER") # SYSTEM_ADMIN, ENFORCEMENT_OFFICER, RETAILER_MANUFACTURER
+    role = Column(String, nullable=False, default="USER")  # SYSTEM_ADMIN, ENFORCEMENT_OFFICER, USER
     location_unit = Column(String, nullable=True, default="Delhi Zone")
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Authentication enhancement columns
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    email_verified = Column(Boolean, default=False)
+    verification_token_hash = Column(String, nullable=True)
+    verification_token_expires = Column(DateTime, nullable=True)
+    reset_token_hash = Column(String, nullable=True)
+    reset_token_expires = Column(DateTime, nullable=True)

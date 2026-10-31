@@ -48,6 +48,26 @@ def ensure_schema_migrations():
                             logger.info(f"Safely added column '{col_name}' to scan_records.")
                         except Exception as col_err:
                             logger.debug(f"Column '{col_name}' already exists or cannot be added: {col_err}")
+
+        if "users" in table_names:
+            existing_user_cols = {c["name"] for c in inspector.get_columns("users")}
+            new_user_cols = [
+                ("updated_at", "TIMESTAMP"),
+                ("email_verified", "BOOLEAN DEFAULT 0"),
+                ("verification_token_hash", "VARCHAR(255)"),
+                ("verification_token_expires", "TIMESTAMP"),
+                ("reset_token_hash", "VARCHAR(255)"),
+                ("reset_token_expires", "TIMESTAMP"),
+            ]
+            with engine.connect() as conn:
+                for col_name, col_type in new_user_cols:
+                    if col_name not in existing_user_cols:
+                        try:
+                            conn.execute(text(f"ALTER TABLE users ADD COLUMN {col_name} {col_type}"))
+                            conn.commit()
+                            logger.info(f"Safely added column '{col_name}' to users.")
+                        except Exception as col_err:
+                            logger.debug(f"Column '{col_name}' already exists or cannot be added: {col_err}")
     except Exception as e:
         logger.warning(f"Schema auto-migration check notice: {e}")
 
