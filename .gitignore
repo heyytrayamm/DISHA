@@ -23,9 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-# Python cache
+# Python cache & build artifacts
 __pycache__/
 *.pyc
+*.egg-info/
+build/
 
 # Database
 *.db
@@ -39,4 +41,7 @@ backend/uploads/
 .env
 .env.*
 !.env.example
+
+# Generated inspection reports
+reports/
 
