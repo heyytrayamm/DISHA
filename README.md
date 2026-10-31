@@ -12,7 +12,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178C6?logo=typescript)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer_Vision-5C3EE8?logo=opencv)
-![License](https://img.shields.io/badge/License-See_Repository-lightgrey)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg))
 
 [Overview](#-overview) •
 [Features](#-key-features) •
@@ -147,3 +147,73 @@ flowchart TD
     M --> N["Compliance Result"]
     N --> O["Inspection History"]
     N --> P["PDF Report"]
+
+
+## 🏗️ System Architecture
+
+DISHA follows a modular architecture that separates the frontend, backend services, OCR processing, AI-assisted interpretation, and compliance evaluation.
+
+### High-Level Architecture
+
+```mermaid
+flowchart TB
+    subgraph CLIENT["Frontend Layer"]
+        A["React 19 + TypeScript"]
+        B["Dashboard"]
+        C["Product Scanner"]
+        D["Inspection History"]
+        E["Reports"]
+    end
+
+    subgraph SERVER["Backend Layer"]
+        F["FastAPI Application"]
+        G["Authentication Service"]
+        H["Inspection API"]
+        I["Product Data Processing"]
+    end
+
+    subgraph INTELLIGENCE["Intelligence Layer"]
+        J["OpenCV Preprocessing"]
+        K["OCR Engine"]
+        L["Field Extraction"]
+        M["AI-Assisted Interpretation"]
+        N["Compliance Rule Engine"]
+    end
+
+    subgraph DATA["Data Layer"]
+        O["SQLAlchemy ORM"]
+        P[("SQLite / PostgreSQL")]
+        Q["Local / S3 Storage"]
+    end
+
+    A --> F
+    B --> A
+    C --> A
+    D --> A
+    E --> A
+
+    F --> G
+    F --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    L --> M
+    M --> N
+
+    F --> O
+    O --> P
+    H --> Q
+
+## 🧪 Testing
+
+DISHA includes backend tests to verify important application functionality.
+
+The backend testing framework uses **pytest**.
+
+### Run Backend Tests
+
+Navigate to the backend directory:
+
+```bash
+cd backend
